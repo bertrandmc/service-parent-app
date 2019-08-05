@@ -2,7 +2,11 @@ export const routes = [
   {
     path: "/overview",
     componentName: 'Overview',
-    scriptUrl: 'http://localhost:3003/dist/overview.js',
-    htmlUrl: 'http://localhost:3002/overview'
+    host: 'http://localhost:3002'
+  },
+  {
+    path: "/places-to-stay",
+    componentName: 'PlacesToStay',
+    host: 'http://localhost:3003'
   }
 ];

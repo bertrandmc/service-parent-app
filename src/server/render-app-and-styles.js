@@ -5,7 +5,8 @@ import { globalStyles } from 'culturetrip-ui/dist/base/global';
 import { StaticRouter } from 'react-router-dom';
 import { PageWrapper } from '../shared/PageWrapper';
 import { fetchMarkup } from './fetch-markup';
-import { getMatchedRoute } from './get-matched-route';
+import { routes } from '../shared/config/routes';
+import { matchPath } from "react-router-dom";
 
 const GlobalStyle = createGlobalStyle`${globalStyles}`;
 
@@ -14,8 +15,8 @@ export const renderAppMarkupAndStyles = ({ location }) => {
   let markup;
   let styleTags;
 
-  const { htmlUrl, scriptUrl } = getMatchedRoute(location);
-  return fetchMarkup(htmlUrl).then(appHtml => {
+  const { host, componentName } = routes.find(route => matchPath(location, route));
+  return fetchMarkup(`${host}/${componentName}`).then(appHtml => {
     try {
       markup = renderToString(sheet.collectStyles(
         <StaticRouter context={{}} location={location}>
@@ -35,7 +36,7 @@ export const renderAppMarkupAndStyles = ({ location }) => {
     return {
       markup,
       styleTags,
-      scriptUrl
+      scriptUrl: `${host}/${componentName}.js`
     }
   });
 };

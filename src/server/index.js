@@ -6,6 +6,6 @@ const index = express();
 index
   .disable('x-powered-by')
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
-  .get('/*', routeHandler);
+  .get(/\/(overview|places-to-stay)/, routeHandler);
 
 export default index;
