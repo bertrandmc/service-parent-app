@@ -4,39 +4,47 @@ import { renderToString } from 'react-dom/server';
 import { globalStyles } from 'culturetrip-ui/dist/base/global';
 import { StaticRouter } from 'react-router-dom';
 import { PageWrapper } from '../shared/PageWrapper';
-import { fetchMarkup } from './fetch-markup';
-import { routes } from '../shared/config/routes';
-import { matchPath } from "react-router-dom";
+import { fetchRenderedRemoteComponents } from './fetch-rendered-remote-components';
+import { Routes } from '../shared/Routes';
+import { RemoteComponentContext, addComponent } from '../shared/utils/remote-component-context';
+import { renderComponentsIntoApp } from './render-remote-components-into-app';
 
 const GlobalStyle = createGlobalStyle`${globalStyles}`;
 
-export const renderAppMarkupAndStyles = ({ location }) => {
+export const renderAppMarkupAndStyles = async ({ location }) => {
   const sheet = new ServerStyleSheet();
-  let markup;
-  let styleTags;
-
-  const { host, componentName } = routes.find(route => matchPath(location, route));
-  return fetchMarkup(`${host}/${componentName}`).then(appHtml => {
-    try {
-      markup = renderToString(sheet.collectStyles(
+  let componentsToFetch = [];
+  let renderedApp;
+  let styles;
+  let scriptUrls = [];
+  try {
+    renderedApp = renderToString(
+      sheet.collectStyles(
         <StaticRouter context={{}} location={location}>
           <GlobalStyle />
           <PageWrapper>
-            [[app]]
+            <RemoteComponentContext.Provider value={{ addComponent: addComponent(componentsToFetch) }}>
+              <Routes />
+            </RemoteComponentContext.Provider>
           </PageWrapper>
         </StaticRouter>
-      )).replace('[[app]]', appHtml);
-      styleTags = sheet.getStyleTags();
-    } catch (error) {
-      console.error(error)
-      throw error;
-    } finally {
-      sheet.seal()
+      )
+    );
+    styles = sheet.getStyleTags();
+    if (componentsToFetch.length) {
+      const renderedComponentsList = await fetchRenderedRemoteComponents(componentsToFetch);
+      renderedApp = renderComponentsIntoApp({ renderedApp, renderedComponentsList });
+      scriptUrls = renderedComponentsList.map(component => component.scriptUrls || []).flat();
     }
-    return {
-      markup,
-      styleTags,
-      scriptUrl: `${host}/${componentName}.js`
-    }
-  });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  } finally {
+    sheet.seal()
+  }
+  return {
+    html: renderedApp,
+    styles,
+    scriptUrls
+  }
 };

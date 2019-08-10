@@ -1,9 +1,9 @@
 
-export const loadScript = ({ host, componentName }) => {
+export const loadScript = ({ scriptUrl }) => {
   return new Promise((resolve, reject) => {
     try {
       const script = document.createElement('script');
-      script.src = `${host}/${componentName}.js`;
+      script.src = scriptUrl;
       script.onload = () => resolve();
       document.head.appendChild(script);
     } catch (err) {
