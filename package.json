@@ -13,7 +13,7 @@
     "ct-universal-app": "github:culture-trip/universal-app",
     "culturetrip-ui": "github:culture-trip/culturetrip-ui#0a440eb",
     "express": "^4.17.1",
-    "isomorphic-fetch": "^2.2.1",
+    "node-fetch": "^2.6.0",
     "razzle": "^3.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
