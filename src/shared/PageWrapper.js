@@ -18,7 +18,7 @@ export const PageWrapper = ({children}) => (
     <Header searchItems={[]}/>
     <Wrapper>
       <NavBar>
-        <Link to='/overview'>Overview</Link> | <Link to='/places-to-stay'>Places to stay</Link>
+        <Link to='/things-to-do'>Things to do</Link> | <Link to='/places-to-stay'>Places to stay</Link>
       </NavBar>
       { children }
     </Wrapper>
