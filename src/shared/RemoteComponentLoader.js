@@ -7,23 +7,31 @@ import { fetchRemoteComponent } from './utils/fetch-remote-component';
 export class RemoteComponentLoader extends React.Component {
   static contextType = RemoteComponentContext;
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      loaded: typeof window !== 'undefined' && window[this.props.componentName]
+  static getDerivedStateFromProps(props) {
+    return {
+      loaded: Boolean(typeof window !== 'undefined' && window[props.componentName])
     };
   }
 
   componentDidMount () {
+    this.fetchData();
+  }
+
+  componentDidUpdate() {
+    this.fetchData();
+  }
+
+  fetchData = () => {
     const { componentName } = this.props;
-    if (!window[this.props.componentName]) {
+    if (!window[componentName]) {
       fetchRemoteComponent(componentName)
-        .then(({scriptUrls}) => {
+        .then(({data, scriptUrls}) => {
+          window[`${componentName}Data`] = data;
           return Promise.all(scriptUrls.map(scriptUrl => loadScript({ scriptUrl })))
         })
         .then(() => this.setState({ loaded: true }));
     }
-  }
+  };
 
   render(){
     const { componentName } = this.props;
