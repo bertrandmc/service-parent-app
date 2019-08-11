@@ -44,13 +44,17 @@ module.exports = {
         'react-dom': {
           root: 'ReactDOM',
           commonjs2: 'react-dom',
-          commonjs: 'react-dom',
-          amd: 'react-dom'
+          commonjs: 'react-dom'
         },
         'styled-components': {
+          root: "styled",
           commonjs: "styled-components",
-          commonjs2: "styled-components",
-          root: "styled"
+          commonjs2: "styled-components"
+        },
+        'react-router-dom': {
+          root: 'ReactRouterDOM',
+          commonjs: 'react-router-dom',
+          commonjs2: 'react-router-dom'
         }
       });
       config.output.libraryTarget = 'umd';

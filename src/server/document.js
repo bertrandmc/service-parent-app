@@ -11,6 +11,7 @@ export const renderDocument = ({ html, styles, scriptUrls }) => `<!doctype html>
       <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js" defer></script>
       <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" defer></script>
       <script crossorigin src="https://unpkg.com/styled-components/dist/styled-components.min.js" defer></script>
+      <script crossorigin src="https://unpkg.com/react-router-dom@5.0.1/umd/react-router-dom.min.js" defer></script>
       ${
         scriptUrls.map(url => `<script src="${url}" defer></script>`)
       }
