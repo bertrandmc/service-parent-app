@@ -46,7 +46,7 @@ export class RemoteComponentLoader extends React.Component {
       return remoteComponentPlaceholder(componentName);
     }
     if (!this.state.loaded) {
-      return <div>Loading...</div>
+      return <p>Loading...</p>
     }
     return React.createElement(window[componentName][componentName], window[`${componentName}Data`] || {});
   }
