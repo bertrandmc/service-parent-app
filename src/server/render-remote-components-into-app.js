@@ -2,9 +2,11 @@ import { remoteComponentPlaceholder } from '../shared/utils/remote-component-pla
 
 export const renderComponentsIntoApp = ({ renderedApp, renderedComponentsList }) => {
   let appHtml = renderedApp;
-  renderedComponentsList.forEach(({componentName, html, styles, data}) => {
+  renderedComponentsList.forEach(({componentName, html, styles, data, error}) => {
     appHtml = appHtml.replace(
       remoteComponentPlaceholder(componentName),
+      error ? `An error occurred fetching component "${componentName}"`
+        :
       `
         ${styles}
         ${html}

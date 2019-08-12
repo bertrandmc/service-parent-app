@@ -34,8 +34,10 @@ export const renderAppMarkupAndStyles = async ({ location }) => {
     if (componentsToFetch.length) {
       const renderedComponentsList = await fetchRenderedRemoteComponents(componentsToFetch);
       renderedApp = renderComponentsIntoApp({ renderedApp, renderedComponentsList });
-      scriptUrls = renderedComponentsList
-        .reduce((accumulator, component) => [...accumulator, ...component.scriptUrls], []);
+      if (!renderedComponentsList.find(component => component.error)) {
+        scriptUrls = renderedComponentsList
+          .reduce((accumulator, component) => [...accumulator, ...component.scriptUrls], []);
+      }
     }
   } catch (error) {
     console.error(error);
